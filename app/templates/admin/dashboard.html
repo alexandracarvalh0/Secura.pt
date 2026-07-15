@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secura.tech - Central Panel</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="admin-container">
+        <h1>Secura.tech Admin Dashboard</h1>
+        <p style="color: var(--text-muted)">Central Administration for SME Client Portals</p>
+        <hr>
+        
+        <h2>Active Corporate Clients</h2>
+        <ul class="client-list">
+            {% for client in clients %}
+                <li class="client-card">
+                    <h3>{{ client.company_name }}</h3>
+                    <p style="margin-bottom: 15px;"><strong>Contact:</strong> {{ client.contact_email }}</p>
+                    
+                    <h4 style="margin-bottom: 8px;">Target Employee Directory ({{ client.employees|length }})</h4>
+                    <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                        <thead>
+                            <tr style="border-bottom: 2px solid var(--border-color); color: var(--text-muted)">
+                                <th style="padding: 8px 0;">ID</th>
+                                <th style="padding: 8px 0;">Name</th>
+                                <th style="padding: 8px 0;">Email</th>
+                                <th style="padding: 8px 0;">Clicks</th>
+                                <th style="padding: 8px 0;">Submissions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for employee in client.employees %}
+                                <tr style="border-bottom: 1px solid var(--border-color);">
+                                    <td style="padding: 8px 0;">{{ employee.id }}</td>
+                                    <td style="padding: 8px 0;">{{ employee.full_name }}</td>
+                                    <td style="padding: 8px 0; color: var(--text-muted)">{{ employee.email }}</td>
+                                    <td style="padding: 8px 0; font-weight: bold; color: {% if employee.click_count > 0 %}{{ 'var(--danger-color)' }}{% else %}inherit{% endif %}">
+                                        {{ employee.click_count }}
+                                    </td>
+                                    <td style="padding: 8px 0; font-weight: bold; color: {% if employee.data_submission_count > 0 %}{{ 'var(--danger-color)' }}{% else %}inherit{% endif %}">
+                                        {{ employee.data_submission_count }}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </li>
+            {% else %}
+                <li class="client-card">No corporate clients registered yet.</li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>

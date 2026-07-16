@@ -12,22 +12,44 @@
         <p style="color: var(--text-muted)">Central Administration for SME Client Portals</p>
         <hr>
         
+        <div class="admin-form">
+            <h3 style="margin-bottom: 15px; color: var(--dark-bg);">Register New Corporate Client</h3>
+            <form action="{{ url_for('admin.add_client') }}" method="POST">
+                <div class="form-row">
+                    <div class="form-inline-group">
+                        <label for="company_name">Company Name</label>
+                        <input type="text" id="company_name" name="company_name" class="form-control" placeholder="e.g. Algarve Tech" required>
+                    </div>
+                    <div class="form-inline-group">
+                        <label for="contact_email">Primary Contact Email</label>
+                        <input type="email" id="contact_email" name="contact_email" class="form-control" placeholder="e.g. contact@algarvetech.pt" required>
+                    </div>
+                    <button type="submit" class="btn-admin">Add Client</button>
+                </div>
+            </form>
+        </div>
+
         <h2>Active Corporate Clients</h2>
         <ul class="client-list">
             {% for client in clients %}
                 <li class="client-card">
-                    <h3>{{ client.company_name }}</h3>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                        <h3 style="margin: 0;">{{ client.company_name }}</h3>
+                        <span style="font-size: 0.85rem; color: var(--text-muted)">ID: {{ client.id }}</span>
+                    </div>
                     <p style="margin-bottom: 15px;"><strong>Contact:</strong> {{ client.contact_email }}</p>
                     
                     <h4 style="margin-bottom: 8px;">Target Employee Directory ({{ client.employees|length }})</h4>
-                    <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                    
+                    {% if client.employees %}
+                    <table style="width: 100%; border-collapse: collapse; text-align: left; margin-bottom: 15px;">
                         <thead>
                             <tr style="border-bottom: 2px solid var(--border-color); color: var(--text-muted)">
                                 <th style="padding: 8px 0;">ID</th>
                                 <th style="padding: 8px 0;">Name</th>
                                 <th style="padding: 8px 0;">Email</th>
-                                <th style="padding: 8px 0;">Clicks</th>
-                                <th style="padding: 8px 0;">Submissions</th>
+                                <th style="padding: 8px 0; text-align: center;">Clicks</th>
+                                <th style="padding: 8px 0; text-align: center;">Submissions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -36,16 +58,35 @@
                                     <td style="padding: 8px 0;">{{ employee.id }}</td>
                                     <td style="padding: 8px 0;">{{ employee.full_name }}</td>
                                     <td style="padding: 8px 0; color: var(--text-muted)">{{ employee.email }}</td>
-                                    <td style="padding: 8px 0; font-weight: bold; color: {% if employee.click_count > 0 %}{{ 'var(--danger-color)' }}{% else %}inherit{% endif %}">
+                                    <td style="padding: 8px 0; text-align: center; font-weight: bold; color: {% if employee.click_count > 0 %}var(--danger-color){% else %}inherit{% endif %}">
                                         {{ employee.click_count }}
                                     </td>
-                                    <td style="padding: 8px 0; font-weight: bold; color: {% if employee.data_submission_count > 0 %}{{ 'var(--danger-color)' }}{% else %}inherit{% endif %}">
+                                    <td style="padding: 8px 0; text-align: center; font-weight: bold; color: {% if employee.data_submission_count > 0 %}var(--danger-color){% else %}inherit{% endif %}">
                                         {{ employee.data_submission_count }}
                                     </td>
                                 </tr>
                             {% endfor %}
                         </tbody>
                     </table>
+                    {% else %}
+                    <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 15px;">No targets registered under this client.</p>
+                    {% endif %}
+
+                    <div class="inline-add-employee">
+                        <h5 style="margin-bottom: 10px; color: var(--text-muted);">Add Target Employee to this Client</h5>
+                        <form action="{{ url_for('admin.add_employee') }}" method="POST">
+                            <input type="hidden" name="client_id" value="{{ client.id }}">
+                            <div class="form-row">
+                                <div class="form-inline-group">
+                                    <input type="text" name="full_name" class="form-control" placeholder="Employee Full Name" required style="padding: 8px;">
+                                </div>
+                                <div class="form-inline-group">
+                                    <input type="email" name="email" class="form-control" placeholder="employee@company.pt" required style="padding: 8px;">
+                                </div>
+                                <button type="submit" class="btn-admin" style="height: 34px; padding: 0 15px; font-size: 0.85rem;">Register Target</button>
+                            </div>
+                        </form>
+                    </div>
                 </li>
             {% else %}
                 <li class="client-card">No corporate clients registered yet.</li>

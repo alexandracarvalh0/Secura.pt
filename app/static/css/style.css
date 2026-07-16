@@ -137,3 +137,55 @@ hr {
 .btn-submit:hover {
     background-color: #166fe5;
 }
+
+/* Admin Form Styles */
+.admin-form {
+    background-color: var(--light-bg);
+    padding: 20px;
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+    margin-bottom: 30px;
+}
+
+.form-row {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px;
+    align-items: flex-end;
+}
+
+.form-inline-group {
+    flex: 1;
+}
+
+.form-inline-group label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: var(--text-muted);
+}
+
+.btn-admin {
+    background-color: var(--primary-color);
+    color: var(--white);
+    border: none;
+    padding: 10px 20px;
+    font-size: 0.95rem;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+    height: 40px; /* Aligns perfectly with form fields */
+    transition: background-color 0.2s ease;
+}
+
+.btn-admin:hover {
+    background-color: var(--primary-hover);
+}
+
+/* Inline card form for adding employees quickly */
+.inline-add-employee {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px dashed var(--border-color);
+}

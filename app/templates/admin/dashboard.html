@@ -1,56 +1,63 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Secura.tech - Central Panel</title>
+    <title>Secura.tech - Painel Central</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
     <div class="admin-container">
-        <h1>Secura.tech Admin Dashboard</h1>
-        <p style="color: var(--text-muted)">Central Administration for SME Client Portals</p>
+        <h1>Painel de Administração Secura.tech</h1>
+        <p style="color: var(--text-muted)">Administração Central para Portais de Clientes PME</p>
         <hr>
         
         <div class="admin-form">
-            <h3 style="margin-bottom: 15px; color: var(--dark-bg);">Register New Corporate Client</h3>
+            <h3 style="margin-bottom: 15px; color: var(--dark-bg);">Registar Novo Cliente Corporativo</h3>
             <form action="{{ url_for('admin.add_client') }}" method="POST">
                 <div class="form-row">
                     <div class="form-inline-group">
-                        <label for="company_name">Company Name</label>
-                        <input type="text" id="company_name" name="company_name" class="form-control" placeholder="e.g. Algarve Tech" required>
+                        <label for="company_name">Nome da Empresa</label>
+                        <input type="text" id="company_name" name="company_name" class="form-control" placeholder="ex: Algarve Tech" required>
                     </div>
                     <div class="form-inline-group">
-                        <label for="contact_email">Primary Contact Email</label>
-                        <input type="email" id="contact_email" name="contact_email" class="form-control" placeholder="e.g. contact@algarvetech.pt" required>
+                        <label for="contact_email">E-mail de Contacto Principal</label>
+                        <input type="email" id="contact_email" name="contact_email" class="form-control" placeholder="ex: contacto@algarvetech.pt" required>
                     </div>
-                    <button type="submit" class="btn-admin">Add Client</button>
+                    <button type="submit" class="btn-admin">Adicionar Cliente</button>
                 </div>
             </form>
         </div>
 
-        <h2>Active Corporate Clients</h2>
+        <h2>Clientes Corporativos Ativos</h2>
         <ul class="client-list">
             {% for client in clients %}
                 <li class="client-card">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
                         <h3 style="margin: 0;">{{ client.company_name }}</h3>
-                        <span style="font-size: 0.85rem; color: var(--text-muted)">ID: {{ client.id }}</span>
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <a href="{{ url_for('admin.download_client_report', client_id=client.id) }}" 
+                            class="btn-admin" 
+                            style="height: 28px; line-height: 28px; padding: 0 12px; font-size: 0.80rem; background-color: #2b6cb0; text-decoration: none; display: inline-block; border-radius: 4px; text-align: center;">
+                            📄 Descarregar PDF
+                            </a>
+                            <span style="font-size: 0.85rem; color: var(--text-muted)">ID: {{ client.id }}</span>
+                        </div>
                     </div>
-                    <p style="margin-bottom: 15px;"><strong>Contact:</strong> {{ client.contact_email }}</p>
+                    <p style="margin-bottom: 15px;"><strong>Contacto:</strong> {{ client.contact_email }}</p>
                     
-                    <h4 style="margin-bottom: 8px;">Target Employee Directory ({{ client.employees|length }})</h4>
+                    <h4 style="margin-bottom: 8px;">Diretório de Funcionários Alvo ({{ client.employees|length }})</h4>
                     
                     {% if client.employees %}
                     <table style="width: 100%; border-collapse: collapse; text-align: left; margin-bottom: 15px;">
                         <thead>
                             <tr style="border-bottom: 2px solid var(--border-color); color: var(--text-muted)">
                                 <th style="padding: 8px 0;">ID</th>
-                                <th style="padding: 8px 0;">Name</th>
-                                <th style="padding: 8px 0;">Email</th>
-                                <th style="padding: 8px 0; text-align: center;">Clicks</th>
-                                <th style="padding: 8px 0; text-align: center;">Submissions</th>
-                                <th style="padding: 8px 0; text-align: center;">Actions</th>
+                                <th style="padding: 8px 0;">Nome</th>
+                                <th style="padding: 8px 0;">E-mail</th>
+                                <th style="padding: 8px 0; text-align: center;">Cliques</th>
+                                <th style="padding: 8px 0; text-align: center;">Submissões</th>
+                                <th style="padding: 8px 0; text-align: center;">Ações</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -68,7 +75,7 @@
                                     <td style="padding: 8px 0; text-align: center;">
                                         <form action="{{ url_for('admin.trigger_employee_email', employee_id=employee.id) }}" method="POST" style="display: inline;">
                                             <button type="submit" class="btn-admin" style="height: 28px; padding: 0 10px; font-size: 0.75rem; background-color: #ff9900;">
-                                                Send Bait
+                                                Enviar Bait
                                             </button>
                                         </form>
                                     </td>
@@ -77,27 +84,29 @@
                         </tbody>
                     </table>
                     {% else %}
-                    <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 15px;">No targets registered under this client.</p>
+                    <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 15px;">Nenhum funcionário alvo registado neste cliente.</p>
                     {% endif %}
 
                     <div class="inline-add-employee">
-                        <h5 style="margin-bottom: 10px; color: var(--text-muted);">Add Target Employee to this Client</h5>
+                        <h5 style="margin-bottom: 10px; color: var(--text-muted);">Adicionar Funcionário Alvo a este Cliente</h5>
                         <form action="{{ url_for('admin.add_employee') }}" method="POST">
                             <input type="hidden" name="client_id" value="{{ client.id }}">
                             <div class="form-row">
-                                <div class="form-inline-group">
-                                    <input type="text" name="full_name" class="form-control" placeholder="Employee Full Name" required style="padding: 8px;">
+                                <div class="form-row">
+                                    <div class="form-inline-group">
+                                        <input type="text" name="full_name" class="form-control" placeholder="Nome Completo do Colaborador" required style="padding: 8px;">
+                                    </div>
+                                    <div class="form-inline-group">
+                                        <input type="email" name="email" class="form-control" placeholder="colaborador@empresa.pt" required style="padding: 8px;">
+                                    </div>
+                                    <button type="submit" class="btn-admin" style="height: 34px; padding: 0 15px; font-size: 0.85rem;">Registar Alvo</button>
                                 </div>
-                                <div class="form-inline-group">
-                                    <input type="email" name="email" class="form-control" placeholder="employee@company.pt" required style="padding: 8px;">
-                                </div>
-                                <button type="submit" class="btn-admin" style="height: 34px; padding: 0 15px; font-size: 0.85rem;">Register Target</button>
                             </div>
                         </form>
                     </div>
                 </li>
             {% else %}
-                <li class="client-card">No corporate clients registered yet.</li>
+                <li class="client-card">Nenhum cliente corporativo registado até ao momento.</li>
             {% endfor %}
         </ul>
     </div>

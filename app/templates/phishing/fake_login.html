@@ -1,30 +1,30 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign In to Your Corporate Account</title>
+    <title>Inicie Sessão na Sua Conta Corporativa</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body class="phishing-body">
     <div class="login-box">
-        <div class="login-logo">Single Sign-On</div>
+        <div class="login-logo">Autenticação Centralizada</div>
         <p style="color: var(--text-muted); margin-bottom: 24px; font-size: 0.9rem;">
-            Please re-authenticate to verify your workspace access token.
+            Por favor, reautentique-se para validar o seu token de acesso ao espaço de trabalho.
         </p>
         
         <form action="{{ url_for('phishing.mock_login', employee_id=employee.id) }}" method="POST">
             <div class="form-group">
-                <label for="email">Username</label>
+                <label for="email">Nome de Utilizador</label>
                 <input type="email" id="email" name="email" class="form-control" value="{{ employee.email }}" readonly>
             </div>
             
             <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" class="form-control" placeholder="Enter your password" required>
+                <label for="password">Palavra-passe</label>
+                <input type="password" id="password" name="password" class="form-control" placeholder="Introduza a sua palavra-passe" required>
             </div>
             
-            <button type="submit" class="btn-submit">Verify Access</button>
+            <button type="submit" class="btn-submit">Verificar Acesso</button>
         </form>
     </div>
 </body>

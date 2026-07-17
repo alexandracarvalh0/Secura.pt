@@ -1,8 +1,12 @@
 import os 
 from flask import Flask
+from flask_mail import Mail
 from app.models import db
 from app.admin.routes import admin_bp
 from app.phishing.routes import phishing_bp
+
+# Instantiate the mail extension globally (not bound to any app yet)
+mail = Mail()
 
 def create_app():
     """Application factory to initialize and configure the Flask app."""
@@ -15,8 +19,9 @@ def create_app():
     except OSError:
         pass
 
-    # Initialize the database extension with the app context
-    db.init_app(app)
+    # Initialize extension
+    db.init_app(app) # database extension with the app context
+    mail.init_app(app) # Flask-Mail with the app configuration
 
     # Register Blueprints for modular routing 
     app.register_blueprint(admin_bp)

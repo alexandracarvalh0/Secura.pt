@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for
 from app.models import db, Client, TargetEmployee
+from app.phishing.routes import send_phishing_email
 
 # Define the blueprint with a dedicated URL prefix for administration 
 admin_bp = Blueprint('admin', __name__, url_prefix='/admin')
@@ -38,5 +39,21 @@ def add_employee():
         )
         db.session.add(new_employee)
         db.session.commit()
+    
+    return redirect(url_for('admin.dashboard'))
+
+@admin_bp.route('/employee/send-email/<int:employee_id>', methods=['POST'])
+def trigger_employee_email(employee_id):
+    """Triggers a simulated phishing email to a specific target employee."""
+    employee = TargetEmployee.query.get_or_404(employee_id)
+
+    # Call the helper function designed in the phishing blueprint 
+    sucess = send_phishing_email(employee)
+
+    if sucess: 
+        # For now, we print to console. Later we can add flash messages 
+        print(f"Sucess: Phishing email successfully sent to {employee.email}")
+    else: 
+        print(f"Error: Failed to deliver email to {employee.email}")
     
     return redirect(url_for('admin.dashboard'))

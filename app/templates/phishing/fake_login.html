@@ -3,29 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inicie Sessão na Sua Conta Corporativa</title>
+    <title>Inicie sessão na sua conta Microsoft</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
-<body class="phishing-body">
-    <div class="login-box">
-        <div class="login-logo">Autenticação Centralizada</div>
-        <p style="color: var(--text-muted); margin-bottom: 24px; font-size: 0.9rem;">
-            Por favor, reautentique-se para validar o seu token de acesso ao espaço de trabalho.
-        </p>
-        
-        <form action="{{ url_for('phishing.mock_login', employee_id=employee.id) }}" method="POST">
-            <div class="form-group">
-                <label for="email">Nome de Utilizador</label>
-                <input type="email" id="email" name="email" class="form-control" value="{{ employee.email }}" readonly>
+<body class="microsoft-body">
+    <div class="ms-login-container">
+        <div class="ms-card">
+            <div class="ms-logo">
+                <div class="ms-logo-tile t1"></div>
+                <div class="ms-logo-tile t2"></div>
+                <div class="ms-logo-tile t3"></div>
+                <div class="ms-logo-tile t4"></div>
             </div>
             
-            <div class="form-group">
-                <label for="password">Palavra-passe</label>
-                <input type="password" id="password" name="password" class="form-control" placeholder="Introduza a sua palavra-passe" required>
+            <div class="ms-title">Introduzir palavra-passe</div>
+            <div class="ms-identity-pill">
+                <span>{{ employee.email }}</span>
             </div>
-            
-            <button type="submit" class="btn-submit">Verificar Acesso</button>
-        </form>
+
+            <form action="{{ url_for('phishing.mock_login', employee_id=employee.id) }}" method="POST">
+                <div class="ms-form-group">
+                    <input type="password" id="password" name="password" class="ms-input" placeholder="Palavra-passe" required autofocus>
+                </div>
+
+                <div class="ms-links-row">
+                    <a href="#" class="ms-link">Esqueceu-se da palavra-passe?</a>
+                </div>
+
+                <div class="ms-btn-row">
+                    <button type="submit" class="ms-btn-primary">Iniciar sessão</button>
+                </div>
+            </form>
+        </div>
     </div>
+
+    <footer class="ms-footer">
+        <a href="#">Termos de utilização</a>
+        <a href="#">Privacidade e cookies</a>
+        <span>...</span>
+    </footer>
 </body>
 </html>

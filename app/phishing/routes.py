@@ -57,7 +57,7 @@ def mock_login(employee_id):
         employee.data_submission_count += 1 
         db.session.commit()
         # Redirect to an educational message or awareness training page
-        return "Aviso de Seguranca: Este era um teste de simulacao de phishing controlado."    
+        return render_template('phishing/notice.html')   
     
     # GET request: Employee just clicked the link 
     employee.click_count += 1 

@@ -19,7 +19,9 @@ ENV/
 
 # Application Database & Instances
 instance/
+reports/
 *.db
+*.pdf
 
 # OS generated files
 .DS_Store

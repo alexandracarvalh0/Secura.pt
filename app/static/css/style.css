@@ -1,191 +1,213 @@
-/* Custom variables for consistent branding */
+/* ==========================================================================
+   Secura.tech — Design System Centralizado V2
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap');
+
 :root {
-    --primary-color: #0052cc;
-    --primary-hover: #003d99;
-    --danger-color: #de350b;
-    --dark-bg: #172b4d;
-    --light-bg: #f4f5f7;
-    --white: #ffffff;
-    --border-color: #ebecf0;
-    --text-main: #091e42;
-    --text-muted: #5e6c84;
+  --navy-950: #0b1220;
+  --navy-800: #131b2e;
+  --page-bg: #f5f7fb;
+  --card-bg: #ffffff;
+  --border-color: #e4e9f2;
+  --text-heading: #0f172a;
+  --text-body-solid: #334155;
+  --text-muted: #64748b;
+  --text-faint: #94a3b8;
+  --text-on-dark-muted: #93a0c2;
+  --brand-500: #6366f1;
+  --brand-600: #4f46e5;
+  --brand-700: #4338ca;
+  --brand-50: #eef0ff;
+  --danger-600: #dc2626;
+  --danger-500: #ef4444;
+  --danger-50: #fef2f2;
+  --success-500: #22c55e;
+  --success-50: #f0fdf4;
+  --warning-500: #f59e0b;
+  --warning-50: #fffbeb;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-pill: 999px;
+  --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.06);
+  --shadow-lg: 0 12px 32px rgba(15, 23, 42, 0.10);
 }
 
-/* Global Reset */
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', sans-serif; background: var(--page-bg); color: var(--text-body-solid); font-size: 15px; }
+h1, h2, h3, h4, h5 { font-family: 'Space Grotesk', sans-serif; color: var(--text-heading); }
+a { text-decoration: none; color: inherit; }
+hr { border: none; border-top: 1px solid var(--border-color); margin: 20px 0; }
 
-body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    background-color: var(--light-bg);
-    color: var(--text-main);
-    line-height: 1.5;
-    padding: 20px;
+/* Shell & Topbar */
+.admin-shell { min-height: 100vh; }
+.admin-topbar {
+  background: linear-gradient(160deg, var(--navy-950) 0%, var(--navy-800) 100%);
+  padding: 22px 40px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;
 }
-
-/* Centralized Container for Admin */
-.admin-container {
-    max-width: 1100px;
-    margin: 40px auto;
-    background-color: var(--white);
-    padding: 30px;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(9, 30, 66, 0.08);
-    border: 1px solid var(--border-color);
+.brand-mark { display: flex; align-items: center; gap: 12px; }
+.brand-mark .brand-icon {
+  width: 38px; height: 38px; border-radius: 10px; background: linear-gradient(135deg, var(--brand-500), var(--brand-700));
+  display: flex; align-items: center; justify-content: center; font-weight: 700; color: white;
 }
+.brand-mark .brand-text strong { color: white; font-size: 1.05rem; }
+.brand-mark .brand-text span { color: var(--text-on-dark-muted); font-size: 0.78rem; }
 
-h1, h2 {
-    color: var(--dark-bg);
-    margin-bottom: 20px;
-}
+.topbar-kpis { display: flex; gap: 36px; flex-wrap: wrap; }
+.kpi-pill { display: flex; flex-direction: column; }
+.kpi-pill .kpi-value { font-family: 'JetBrains Mono', monospace; font-weight: 600; font-size: 1.35rem; color: white; }
+.kpi-pill .kpi-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-on-dark-muted); }
+.topbar-kpis .kpi-danger .kpi-value { color: #fca5a5; }
 
-hr {
-    border: 0;
-    height: 1px;
-    background: var(--border-color);
-    margin: 20px 0;
-}
+/* Container Largo e Lista Esticada a 100% */
+.admin-container { max-width: 1440px; margin: 0 auto; padding: 40px; }
+.page-heading h1 { font-size: 1.7rem; margin-bottom: 4px; }
+.page-heading p { color: var(--text-muted); font-size: 0.95rem; }
 
-/* Client Card Grid */
-.client-list {
-    list-style: none;
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 20px;
-}
+.admin-form { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 24px; box-shadow: var(--shadow-sm); margin-bottom: 30px; }
+.form-row { display: flex; gap: 14px; align-items: flex-end; flex-wrap: wrap; }
+.form-inline-group { display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 240px; }
+.form-inline-group label { font-size: 0.78rem; font-weight: 600; color: var(--text-muted); }
+.form-control { width: 100%; padding: 11px 14px; border-radius: var(--radius-sm); border: 1.5px solid var(--border-color); background: #fbfcfe; font-size: 0.9rem; }
+.form-control:focus { outline: none; border-color: var(--brand-500); background: white; box-shadow: 0 0 0 4px var(--brand-50); }
 
-.client-card {
-    background: var(--white);
-    border: 1px solid var(--border-color);
-    border-radius: 6px;
-    padding: 20px;
-}
-
-.client-card h3 {
-    font-size: 1.2rem;
-    color: var(--primary-color);
-    margin-bottom: 10px;
-}
-
-/* Phishing Mock Portal Style */
-.phishing-body {
-    background-color: #f0f2f5;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    padding: 10px;
-}
-
-.login-box {
-    width: 100%;
-    max-width: 400px;
-    background: var(--white);
-    padding: 40px;
-    border-radius: 4px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.1);
-    text-align: center;
-}
-
-.login-logo {
-    font-size: 1.6rem;
-    font-weight: bold;
-    color: #1877f2; /* Generic social/portal blue */
-    margin-bottom: 20px;
-}
-
-.form-group {
-    text-align: left;
-    margin-bottom: 20px;
-}
-
-.form-group label {
-    display: block;
-    font-size: 0.85rem;
-    font-weight: 600;
-    margin-bottom: 6px;
-}
-
-.form-control {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #ccd0d5;
-    border-radius: 6px;
-    font-size: 1rem;
-}
-
-.form-control:focus {
-    outline: none;
-    border-color: #1877f2;
-}
-
-.btn-submit {
-    width: 100%;
-    background-color: #1877f2;
-    color: var(--white);
-    border: none;
-    padding: 12px;
-    font-size: 1.1rem;
-    font-weight: bold;
-    border-radius: 6px;
-    cursor: pointer;
-}
-
-.btn-submit:hover {
-    background-color: #166fe5;
-}
-
-/* Admin Form Styles */
-.admin-form {
-    background-color: var(--light-bg);
-    padding: 20px;
-    border-radius: 6px;
-    border: 1px solid var(--border-color);
-    margin-bottom: 30px;
-}
-
-.form-row {
-    display: flex;
-    gap: 15px;
-    margin-bottom: 15px;
-    align-items: flex-end;
-}
-
-.form-inline-group {
-    flex: 1;
-}
-
-.form-inline-group label {
-    display: block;
-    font-size: 0.85rem;
-    font-weight: 600;
-    margin-bottom: 6px;
-    color: var(--text-muted);
-}
-
+/* Buttons */
 .btn-admin {
-    background-color: var(--primary-color);
-    color: var(--white);
-    border: none;
-    padding: 10px 20px;
-    font-size: 0.95rem;
-    font-weight: bold;
-    border-radius: 4px;
-    cursor: pointer;
-    height: 40px; /* Aligns perfectly with form fields */
-    transition: background-color 0.2s ease;
+  display: inline-flex; 
+  align-items: center; 
+  justify-content: center; 
+  height: 40px; 
+  padding: 0 18px; 
+  border: none; 
+  border-radius: var(--radius-sm);
+  background: var(--brand-600); 
+  color: #ffffff !important; /* Força o texto a branco */
+  font-family: 'Inter', sans-serif; 
+  font-weight: 600; 
+  font-size: 0.86rem; 
+  cursor: pointer; 
+  white-space: nowrap; 
+  transition: background 0.15s ease, transform 0.1s ease;
+}
+.btn-admin:hover { background: var(--brand-700); color: #ffffff !important; }
+.btn-admin:active { transform: translateY(1px); }
+
+/* CORREÇÃO DO ISCO: Força o fundo laranja imediatamente */
+.btn-admin.btn-lure { 
+  background-color: #d97706 !important; 
+  color: #ffffff !important; 
+}
+.btn-admin.btn-lure:hover { 
+  background-color: #b45309 !important; 
 }
 
-.btn-admin:hover {
-    background-color: var(--primary-hover);
+/* NOVO BOTÃO DE APAGAR: Estilo corporativo de perigo */
+.btn-admin.btn-delete {
+  background-color: #ef4444 !important;
+  color: #ffffff !important;
+}
+.btn-admin.btn-delete:hover {
+  background-color: #dc2626 !important;
 }
 
-/* Inline card form for adding employees quickly */
-.inline-add-employee {
-    margin-top: 15px;
-    padding-top: 15px;
-    border-top: 1px dashed var(--border-color);
+/* Novo botão cinzento para desativar */
+.btn-admin.btn-secondary {
+  background-color: #64748b !important;
+  color: #ffffff !important;
 }
+.btn-admin.btn-secondary:hover {
+  background-color: #475569 !important;
+}
+
+.btn-admin.btn-sm { height: 32px; padding: 0 12px; font-size: 0.78rem; }
+
+.section-title { display: flex; align-items: center; justify-content: space-between; margin: 40px 0 16px; }
+.section-title h2 { font-size: 1.2rem; }
+.section-title .section-count { font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; color: var(--text-muted); background: var(--card-bg); border: 1px solid var(--border-color); padding: 3px 10px; border-radius: var(--radius-pill); }
+
+/* ESTICA AQUI: Uma empresa por linha com 100% de largura */
+.client-list { list-style: none; display: flex; flex-direction: column; gap: 24px; }
+.client-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 26px; box-shadow: var(--shadow-sm); }
+.client-card:hover { box-shadow: var(--shadow-lg); }
+.client-card-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 16px; border-bottom: 1px solid var(--border-color); margin-bottom: 20px; }
+.client-identity .client-meta { display: flex; gap: 14px; align-items: center; color: var(--text-muted); font-size: 0.85rem; margin-top: 4px; }
+.client-identity .client-meta .client-id { font-family: 'JetBrains Mono', monospace; background: var(--page-bg); border-radius: var(--radius-sm); padding: 2px 8px; }
+.client-actions { display: flex; align-items: center; gap: 16px; }
+
+/* Gráfico Circular de Risco Real */
+.risk-gauge { position: relative; width: 50px; height: 50px; }
+.risk-gauge svg { transform: rotate(-90deg); width: 50px; height: 50px; }
+.risk-gauge .gauge-track { fill: none; stroke: var(--border-color); stroke-width: 5; }
+.risk-gauge .gauge-value { fill: none; stroke-width: 5; stroke-linecap: round; transition: stroke-dashoffset 0.5s ease; }
+.risk-gauge.risk-low .gauge-value { stroke: var(--success-500); }
+.risk-gauge.risk-medium .gauge-value { stroke: var(--warning-500); }
+.risk-gauge.risk-high .gauge-value { stroke: var(--danger-500); }
+.risk-gauge .gauge-label { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-family: 'JetBrains Mono', monospace; font-weight: 600; font-size: 0.75rem; }
+
+.client-body-title h4 { font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 12px; }
+.employee-table-wrap { overflow-x: auto; margin-bottom: 20px; border: 1px solid var(--border-color); border-radius: var(--radius-md); background: white; }
+.employee-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+.employee-table th { text-align: left; padding: 12px 16px; background: #fafbfd; color: var(--text-muted); font-weight: 600; border-bottom: 1px solid var(--border-color); }
+.employee-table td { padding: 12px 16px; border-bottom: 1px solid var(--border-color); }
+.employee-table tbody tr:last-child td { border-bottom: none; }
+.employee-table tbody tr:hover { background: #fafbfd; }
+.employee-table .col-center { text-align: center; }
+.employee-table td.mono-id, .employee-table td.employee-email { font-family: 'JetBrains Mono', monospace; color: var(--text-muted); }
+
+.metric-badge { display: inline-flex; align-items: center; justify-content: center; min-width: 28px; padding: 3px 8px; border-radius: var(--radius-pill); font-family: 'JetBrains Mono', monospace; font-weight: 600; }
+.metric-badge.badge-zero { background: var(--page-bg); color: var(--text-faint); }
+.metric-badge.badge-alert { background: var(--danger-50); color: var(--danger-600); }
+
+.inline-add-employee { background: var(--page-bg); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 18px; }
+.inline-add-employee h5 { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 12px; }
+
+/* ==========================================================================
+   CLONE MICROSOFT & ACESSOS INTERNOS (FAKE LOGIN)
+   ========================================================================== */
+.microsoft-body {
+  margin: 0; min-height: 100vh; display: flex; flex-direction: column; justify-content: space-between;
+  background-image: url('https://aadcdn.msauth.net/shared/1.0/content/images/backgrounds/2_bc3d32a696895ca2c6eb1f4e15e87bb6.svg'); background-size: cover; background-position: center;
+}
+.ms-login-container { flex: 1; display: flex; align-items: center; justify-content: center; padding: 20px; }
+.ms-card { width: 100%; max-width: 440px; background: #ffffff; padding: 44px; box-shadow: 0 4px 16px rgba(0,0,0,0.1); border: 1px solid rgba(0,0,0,0.05); }
+.ms-logo { display: grid; grid-template-columns: repeat(2, 10px); gap: 2px; margin-bottom: 24px; }
+.ms-logo-tile { width: 10px; height: 10px; }
+.ms-logo-tile.t1 { background-color: #f25022; }
+.ms-logo-tile.t2 { background-color: #7fba00; }
+.ms-logo-tile.t3 { background-color: #00a4ef; }
+.ms-logo-tile.t4 { background-color: #ffb900; }
+.ms-title { font-size: 1.5rem; font-weight: 600; color: #1b1b1b; margin-bottom: 16px; }
+.ms-identity-pill { font-size: 0.92rem; color: #1b1b1b; margin-bottom: 20px; }
+.ms-form-group { margin-bottom: 18px; }
+.ms-input { width: 100%; border: none; border-bottom: 1px solid #666666; padding: 6px 0; font-size: 0.95rem; outline: none; background: transparent; }
+.ms-input:focus { border-bottom: 2px solid #0067b8; }
+.ms-links-row { display: flex; justify-content: space-between; margin-bottom: 28px; font-size: 0.82rem; }
+.ms-link { color: #0067b8; }
+.ms-link:hover { text-decoration: underline; }
+.ms-btn-row { display: flex; justify-content: flex-end; }
+.ms-btn-primary { background-color: #0067b8; color: #ffffff; border: none; padding: 6px 32px; font-size: 0.95rem; min-width: 108px; cursor: pointer; }
+.ms-btn-primary:hover { background-color: #005da6; }
+.ms-footer { padding: 16px 40px; display: flex; justify-content: flex-end; gap: 24px; font-size: 0.72rem; color: #000000; }
+
+/* ==========================================================================
+   PÁGINA DE EDUCAÇÃO / AVISO DE PHISHING (NOVA UI)
+   ========================================================================== */
+.education-body {
+  background-color: #0f172a; color: white; font-family: 'Inter', sans-serif;
+  display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px;
+}
+.edu-card {
+  background: #1e293b; border-radius: var(--radius-lg); max-width: 650px; width: 100%;
+  padding: 40px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.5); border: 1px solid #334155; text-align: center;
+}
+.edu-icon { font-size: 3rem; margin-bottom: 16px; animation: pulse 2s infinite; }
+.edu-card h1 { font-size: 1.8rem; color: #f87171; margin-bottom: 12px; font-family: 'Space Grotesk', sans-serif; }
+.edu-card p { color: #94a3b8; font-size: 1rem; line-height: 1.6; margin-bottom: 24px; }
+.edu-tips { text-align: left; background: #0f172a; border-radius: var(--radius-md); padding: 20px; margin-bottom: 26px; border: 1px solid #334155; }
+.edu-tips h3 { font-size: 0.95rem; color: #38bdf8; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 12px; }
+.edu-tips ul { list-style: none; display: flex; flex-direction: column; gap: 10px; font-size: 0.9rem; color: #cbd5e1; }
+.edu-tips ul li { display: flex; gap: 10px; align-items: flex-start; }
+.edu-footer { font-size: 0.8rem; color: #64748b; border-top: 1px solid #334155; padding-top: 16px; }
+
+@keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.08); } }

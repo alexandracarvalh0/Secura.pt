@@ -3,112 +3,267 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Secura.tech - Painel Central</title>
+    <title>Secura.pt - Painel Central</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-    <div class="admin-container">
-        <h1>Painel de Administração Secura.tech</h1>
-        <p style="color: var(--text-muted)">Administração Central para Portais de Clientes PME</p>
-        <hr>
-        
-        <div class="admin-form">
-            <h3 style="margin-bottom: 15px; color: var(--dark-bg);">Registar Novo Cliente Corporativo</h3>
-            <form action="{{ url_for('admin.add_client') }}" method="POST">
-                <div class="form-row">
-                    <div class="form-inline-group">
-                        <label for="company_name">Nome da Empresa</label>
-                        <input type="text" id="company_name" name="company_name" class="form-control" placeholder="ex: Algarve Tech" required>
-                    </div>
-                    <div class="form-inline-group">
-                        <label for="contact_email">E-mail de Contacto Principal</label>
-                        <input type="email" id="contact_email" name="contact_email" class="form-control" placeholder="ex: contacto@algarvetech.pt" required>
-                    </div>
-                    <button type="submit" class="btn-admin">Adicionar Cliente</button>
+    <div class="admin-shell">
+        <header class="admin-topbar">
+            <div class="brand-mark">
+                <div class="brand-icon">S</div>
+                <div class="brand-text">
+                    <strong>Secura</strong>
+                    <span>Plataforma de Simulação e Formação</span>
                 </div>
-            </form>
-        </div>
+            </div>
+            <div class="topbar-kpis">
+                <div class="kpi-pill">
+                    <span class="kpi-value" id="kpi-clients">{{ clients|length }}</span>
+                    <span class="kpi-label">Clientes Ativos</span>
+                </div>
+                <div class="kpi-pill">
+                    <span class="kpi-value" id="kpi-employees">{{ total_employees }}</span>
+                    <span class="kpi-label">Colaboradores Alvo</span>
+                </div>
+                <div class="kpi-pill kpi-danger">
+                    <span class="kpi-value" id="kpi-clicks">{{ total_clicks }}</span>
+                    <span class="kpi-label">Cliques Realizados</span>
+                </div>
+                <div class="kpi-pill kpi-danger">
+                    <span class="kpi-value" id="kpi-submissions">{{ total_submissions }}</span>
+                    <span class="kpi-label">Dados Submetidos</span>
+                </div>
+            </div>
+        </header>
 
-        <h2>Clientes Corporativos Ativos</h2>
-        <ul class="client-list">
-            {% for client in clients %}
-                <li class="client-card">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                        <h3 style="margin: 0;">{{ client.company_name }}</h3>
-                        <div style="display: flex; align-items: center; gap: 15px;">
-                            <a href="{{ url_for('admin.download_client_report', client_id=client.id) }}" 
-                            class="btn-admin" 
-                            style="height: 28px; line-height: 28px; padding: 0 12px; font-size: 0.80rem; background-color: #2b6cb0; text-decoration: none; display: inline-block; border-radius: 4px; text-align: center;">
-                            📄 Descarregar PDF
-                            </a>
-                            <span style="font-size: 0.85rem; color: var(--text-muted)">ID: {{ client.id }}</span>
+        <div class="admin-container">
+            <div class="page-heading">
+                <h1>Painel de Administração</h1>
+                <p>Administração central para portais de simulação de clientes PME</p>
+            </div>
+
+            <div class="admin-form">
+                <h3>Registar Novo Cliente Corporativo</h3>
+                <form action="{{ url_for('admin.add_client') }}" method="POST">
+                    <div class="form-row">
+                        <div class="form-inline-group">
+                            <label for="company_name">Nome da Empresa</label>
+                            <input type="text" id="company_name" name="company_name" class="form-control" placeholder="ex: Algarve Tech" required>
                         </div>
+                        <div class="form-inline-group">
+                            <label for="contact_email">E-mail de Contacto Principal</label>
+                            <input type="email" id="contact_email" name="contact_email" class="form-control" placeholder="ex: contacto@algarvetech.pt" required>
+                        </div>
+                        <button type="submit" class="btn-admin">Adicionar Cliente</button>
                     </div>
-                    <p style="margin-bottom: 15px;"><strong>Contacto:</strong> {{ client.contact_email }}</p>
-                    
-                    <h4 style="margin-bottom: 8px;">Diretório de Funcionários Alvo ({{ client.employees|length }})</h4>
-                    
-                    {% if client.employees %}
-                    <table style="width: 100%; border-collapse: collapse; text-align: left; margin-bottom: 15px;">
-                        <thead>
-                            <tr style="border-bottom: 2px solid var(--border-color); color: var(--text-muted)">
-                                <th style="padding: 8px 0;">ID</th>
-                                <th style="padding: 8px 0;">Nome</th>
-                                <th style="padding: 8px 0;">E-mail</th>
-                                <th style="padding: 8px 0; text-align: center;">Cliques</th>
-                                <th style="padding: 8px 0; text-align: center;">Submissões</th>
-                                <th style="padding: 8px 0; text-align: center;">Ações</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for employee in client.employees %}
-                                <tr style="border-bottom: 1px solid var(--border-color);">
-                                    <td style="padding: 8px 0;">{{ employee.id }}</td>
-                                    <td style="padding: 8px 0;">{{ employee.full_name }}</td>
-                                    <td style="padding: 8px 0; color: var(--text-muted)">{{ employee.email }}</td>
-                                    <td style="padding: 8px 0; text-align: center; font-weight: bold; color: {% if employee.click_count > 0 %}var(--danger-color){% else %}inherit{% endif %}">
-                                        {{ employee.click_count }}
-                                    </td>
-                                    <td style="padding: 8px 0; text-align: center; font-weight: bold; color: {% if employee.data_submission_count > 0 %}var(--danger-color){% else %}inherit{% endif %}">
-                                        {{ employee.data_submission_count }}
-                                    </td>
-                                    <td style="padding: 8px 0; text-align: center;">
-                                        <form action="{{ url_for('admin.trigger_employee_email', employee_id=employee.id) }}" method="POST" style="display: inline;">
-                                            <button type="submit" class="btn-admin" style="height: 28px; padding: 0 10px; font-size: 0.75rem; background-color: #ff9900;">
-                                                Enviar Bait
-                                            </button>
-                                        </form>
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                    {% else %}
-                    <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 15px;">Nenhum funcionário alvo registado neste cliente.</p>
-                    {% endif %}
+                </form>
+            </div>
 
-                    <div class="inline-add-employee">
-                        <h5 style="margin-bottom: 10px; color: var(--text-muted);">Adicionar Funcionário Alvo a este Cliente</h5>
-                        <form action="{{ url_for('admin.add_employee') }}" method="POST">
-                            <input type="hidden" name="client_id" value="{{ client.id }}">
-                            <div class="form-row">
-                                <div class="form-row">
-                                    <div class="form-inline-group">
-                                        <input type="text" name="full_name" class="form-control" placeholder="Nome Completo do Colaborador" required style="padding: 8px;">
-                                    </div>
-                                    <div class="form-inline-group">
-                                        <input type="email" name="email" class="form-control" placeholder="colaborador@empresa.pt" required style="padding: 8px;">
-                                    </div>
-                                    <button type="submit" class="btn-admin" style="height: 34px; padding: 0 15px; font-size: 0.85rem;">Registar Alvo</button>
+            <div class="section-title">
+                <h2>Clientes Corporativos Ativos</h2>
+                <span class="section-count">{{ clients|length }} no total</span>
+            </div>
+
+            <ul class="client-list">
+                {% for client in clients %}
+                    {% set emp_count = client.employees|length %}
+                    {% set click_sum = client.employees|map(attribute='click_count')|sum %}
+                    {% set sub_sum = client.employees|map(attribute='data_submission_count')|sum %}
+                    
+                    {% if emp_count > 0 %}
+                        {% set rate = ((click_sum + sub_sum) / (emp_count * 2) * 100)|round|int %}
+                        {% if rate > 100 %}{% set rate = 100 %}{% endif %}
+                    {% else %}
+                        {% set rate = 0 %}
+                    {% endif %}
+                    
+                    {% set risk_class = "risk-low" %}
+                    {% if rate > 25 %}{% set risk_class = "risk-medium" %}{% endif %}
+                    {% if rate > 60 %}{% set risk_class = "risk-high" %}{% endif %}
+                    
+                    {% set offset = 150.8 - (rate / 100 * 150.8) %}
+
+                    <li class="client-card" style="{% if not client.is_active %}opacity: 0.65; border-style: dashed;{% endif %}">
+                        <div class="client-card-header">
+                            <div class="client-identity">
+                                <h3 style="{% if not client.is_active %}text-decoration: line-through;{% endif %}">
+                                    {{ client.company_name }} 
+                                    {% if not client.is_active %}<span style="font-size: 0.8rem; color: var(--danger-600); font-weight: bold;">(INATIVO)</span>{% endif %}
+                                </h3>
+                                <div class="client-meta">
+                                    <span class="client-id">ID {{ client.id }}</span>
+                                    <span>{{ client.contact_email }}</span>
                                 </div>
                             </div>
-                        </form>
-                    </div>
-                </li>
-            {% else %}
-                <li class="client-card">Nenhum cliente corporativo registado até ao momento.</li>
-            {% endfor %}
-        </ul>
+                            <div class="client-actions">
+                                <div class="risk-gauge {{ risk_class }}" data-client-id="{{ client.id }}" title="Índice Geral de Vulnerabilidade">
+                                    <svg viewBox="0 0 58 58">
+                                        <circle class="gauge-track" cx="29" cy="29" r="24"></circle>
+                                        <circle class="gauge-value" cx="29" cy="29" r="24"
+                                                stroke-dasharray="150.8"
+                                                stroke-dashoffset="{{ offset }}"></circle>
+                                    </svg>
+                                    <span class="gauge-label">{{ rate }}%</span>
+                                </div>
+                                
+                                <a href="{{ url_for('admin.download_client_report', client_id=client.id) }}" class="btn-admin btn-sm" style="background-color: #2b6cb0;">
+                                    📄 Relatório PDF
+                                </a>
+
+                                <form action="{{ url_for('admin.toggle_client_status', client_id=client.id) }}" method="POST" style="display: inline;">
+                                    <button type="submit" class="btn-admin btn-secondary btn-sm">
+                                        {% if client.is_active %}Desativar{% else %}Ativar{% endif %}
+                                    </button>
+                                </form>
+
+                                <form action="{{ url_for('admin.delete_client', client_id=client.id) }}" method="POST" style="display: inline;" onsubmit="return confirm('Tem a certeza que deseja eliminar esta empresa e TODOS os seus colaboradores permanentes?');">
+                                    <button type="submit" class="btn-admin btn-delete btn-sm">🗑️ Apagar</button>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="client-body-title">
+                            <h4>Diretório de Funcionários Alvo ({{ emp_count }})</h4>
+                        </div>
+
+                        {% if client.employees %}
+                        <div class="employee-table-wrap">
+                            <table class="employee-table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Nome</th>
+                                        <th>E-mail</th>
+                                        <th class="col-center">Cliques</th>
+                                        <th class="col-center">Submissões</th>
+                                        <th class="col-center">Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for employee in client.employees %}
+                                        <tr class="emp-row" data-employee-id="{{ employee.id }}">
+                                            <td class="mono-id">{{ employee.id }}</td>
+                                            <td>{{ employee.full_name }}</td>
+                                            <td class="employee-email">{{ employee.email }}</td>
+                                            <td class="col-center">
+                                                <span class="metric-badge click-count-badge {% if employee.click_count > 0 %}badge-alert{% else %}badge-zero{% endif %}">
+                                                    {{ employee.click_count }}
+                                                </span>
+                                            </td>
+                                            <td class="col-center">
+                                                <span class="metric-badge sub-count-badge {% if employee.data_submission_count > 0 %}badge-alert{% else %}badge-zero{% endif %}">
+                                                    {{ employee.data_submission_count }}
+                                                </span>
+                                            </td>
+                                            <td class="col-center" style="display: flex; gap: 8px; justify-content: center; align-items: center;">
+                                                <form action="{{ url_for('admin.trigger_employee_email', employee_id=employee.id) }}" method="POST" style="display: inline;">
+                                                    <button type="submit" class="btn-admin btn-lure btn-sm">Enviar Isco</button>
+                                                </form>
+                                                
+                                                <form action="{{ url_for('admin.delete_employee', employee_id=employee.id) }}" method="POST" style="display: inline;" onsubmit="return confirm('Eliminar este colaborador?');">
+                                                    <button type="submit" class="btn-admin btn-delete btn-sm" style="padding: 0 8px;">🗑️</button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        {% else %}
+                        <p class="empty-note">Nenhum funcionário alvo registado neste cliente.</p>
+                        {% endif %}
+
+                        <div class="inline-add-employee">
+                            <h5>Adicionar Funcionário Alvo a este Cliente</h5>
+                            <form action="{{ url_for('admin.add_employee') }}" method="POST">
+                                <input type="hidden" name="client_id" value="{{ client.id }}">
+                                <div class="form-row">
+                                    <div class="form-inline-group">
+                                        <input type="text" name="full_name" class="form-control" placeholder="Nome Completo" required>
+                                    </div>
+                                    <div class="form-inline-group">
+                                        <input type="email" name="email" class="form-control" placeholder="colaborador@empresa.pt" required>
+                                    </div>
+                                    <button type="submit" class="btn-admin btn-sm" style="height: 40px;">Registar Alvo</button>
+                                </div>
+                            </form>
+                        </div>
+                    </li>
+                {% else %}
+                    <li class="client-card" style="text-align: center; color: var(--text-muted); padding: 40px;">Nenhum cliente corporativo registado até ao momento.</li>
+                {% endfor %}
+            </ul>
+        </div>
     </div>
+
+    <script>
+        /**
+         * Periodically fetches updated metrics from the existing /admin/dashboard route in JSON format
+         * and updates the DOM elements without requiring a full page refresh.
+         */
+        function refreshDashboardMetrics() {
+            fetch("{{ url_for('admin.dashboard') }}?format=json")
+                .then(response => response.json())
+                .then(data => {
+                    // Update global topbar KPI metrics
+                    const clientsEl = document.getElementById('kpi-clients');
+                    const employeesEl = document.getElementById('kpi-employees');
+                    const clicksEl = document.getElementById('kpi-clicks');
+                    const submissionsEl = document.getElementById('kpi-submissions');
+
+                    if (clientsEl) clientsEl.innerText = data.total_clients;
+                    if (employeesEl) employeesEl.innerText = data.total_employees;
+                    if (clicksEl) clicksEl.innerText = data.total_clicks;
+                    if (submissionsEl) submissionsEl.innerText = data.total_submissions;
+
+                    // Update employee click and submission badges
+                    if (data.employees) {
+                        data.employees.forEach(emp => {
+                            const row = document.querySelector(`.emp-row[data-employee-id="${emp.id}"]`);
+                            if (row) {
+                                const clickBadge = row.querySelector('.click-count-badge');
+                                const subBadge = row.querySelector('.sub-count-badge');
+
+                                if (clickBadge) {
+                                    clickBadge.innerText = emp.click_count;
+                                    clickBadge.className = `metric-badge click-count-badge ${emp.click_count > 0 ? 'badge-alert' : 'badge-zero'}`;
+                                }
+                                if (subBadge) {
+                                    subBadge.innerText = emp.data_submission_count;
+                                    subBadge.className = `metric-badge sub-count-badge ${emp.data_submission_count > 0 ? 'badge-alert' : 'badge-zero'}`;
+                                }
+                            }
+                        });
+                    }
+
+                    // Update client vulnerability gauge circles and percentages
+                    if (data.clients) {
+                        data.clients.forEach(client => {
+                            const gauge = document.querySelector(`.risk-gauge[data-client-id="${client.id}"]`);
+                            if (gauge) {
+                                const label = gauge.querySelector('.gauge-label');
+                                const circle = gauge.querySelector('.gauge-value');
+
+                                if (label) label.innerText = `${client.rate}%`;
+                                if (circle) circle.setAttribute('stroke-dashoffset', client.offset);
+
+                                gauge.classList.remove('risk-low', 'risk-medium', 'risk-high');
+                                if (client.rate > 60) {
+                                    gauge.classList.add('risk-high');
+                                } else if (client.rate > 25) {
+                                    gauge.classList.add('risk-medium');
+                                } else {
+                                    gauge.classList.add('risk-low');
+                                }
+                            }
+                        });
+                    }
+                })
+                .catch(error => console.error("Error updating dashboard live metrics:", error));
+        }
+
+        // Execute background refresh every 3 seconds
+        setInterval(refreshDashboardMetrics, 3000);
+    </script>
 </body>
 </html>
